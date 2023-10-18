@@ -20,14 +20,15 @@ class Gameplay:
         self.root.bind("<Key>", self.bindKey)
     def bindKey(self, event):
         key = event.keysym
-        if key == "Left" or key == "Right" or key == "Up" or key == "Down":
-            if key == "Left":
+        validKeys = ["Left", "Right", "Up", "Down", "a", "d", "w", "s"]
+        if key in validKeys:
+            if key == "Left" or key == "a":
                 self.moveLeft()
-            elif key == "Right":
+            elif key == "Right" or key == "d":
                 self.moveRight()
-            elif key == "Up":
+            elif key == "Up" or key == "w":
                 self.moveUp()
-            elif key == "Down":
+            elif key == "Down" or key == "s":
                 self.moveDown()
             if not self.isFull():
                 self.addNewTile() #NOTE: render in addNewTile() instead of here
@@ -60,7 +61,7 @@ class Gameplay:
         self.gameFrame.grid_propagate(0)
 
         #title and step label
-        self.title = tk.Label(self.root, text="8-puzzle", font=("Arial", 30, "bold"))
+        self.title = tk.Label(self.root, text="2048", font=("Arial", 30, "bold"))
         self.title.place(x=560, y=20)
         self.stepLabel = tk.Label(self.root, text=f"Step: 0", font=("Arial", 20))
         self.stepLabel.place(x=350, y=75)
@@ -73,9 +74,9 @@ class Gameplay:
         self.btnFrame.pack_propagate(0) # don't shrink
         BUTTON_WIDTH = 10
         PADDING = 15
-        btnReset = tk.Button(self.btnFrame, text="Reset", font=("Arial", 20), 
-                        width=BUTTON_WIDTH, command=lambda: self.initializeTiles(self.state))
-        btnReset.pack(pady=PADDING)
+        btnRestart = tk.Button(self.btnFrame, text="Restart", font=("Arial", 20), 
+                        width=BUTTON_WIDTH, command=lambda: self.restart())
+        btnRestart.pack(pady=PADDING)
         cbAlgo = ttk.Combobox(self.btnFrame, values=["BFS", "DFS", "IDS", "UCS"], font=("Arial", 20), 
                               width=BUTTON_WIDTH, state="readonly")
         # stop control with up and down arrow keys
@@ -85,6 +86,11 @@ class Gameplay:
         btnSolve = tk.Button(self.btnFrame, text="Solve", font=("Arial", 20), 
                      width=BUTTON_WIDTH, command=lambda: self.solve(cbAlgo.get()))
         btnSolve.pack(pady=PADDING)
+    def restart(self):
+        self.step = 0
+        self.stepLabel["text"] = f"Step: {self.step}"
+        self.state = np.zeros((4, 4), dtype=np.int32)
+        self.addNewTile()
     def solve(self, algo):
         if algo == "BFS":
             self.solveBFS()
