@@ -48,7 +48,7 @@ class Gameplay:
         self.stepLabel = tk.Label(self.root, text=f"Step: 0", font=("Arial", 20))
         self.stepLabel.place(x=350, y=75)
         self.scoreLabel = tk.Label(self.root, text=f"Score: 0", font=("Arial", 20))
-        self.scoreLabel.place(x=680, y=75) #for benchmark
+        self.scoreLabel.place(x=680, y=75)
 
         #button frame
         self.btnFrame = tk.Frame(self.root, width=200, height=500, background="cyan")

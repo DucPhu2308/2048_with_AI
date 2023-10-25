@@ -3,7 +3,7 @@ class Board:
     def __init__(self):
         self.state = np.zeros((4, 4), dtype=np.int32)
         self.step = 0
-        self.score = 0
+        self.score = -1 #add new tile will increase score by 1
         self.addNewTile()
     def isGameOver(self):
         if self.isFull() and self.checkHorizontalGameOver() and self.checkVerticalGameOver():
@@ -30,6 +30,7 @@ class Board:
             row = np.random.randint(0, 4)
             col = np.random.randint(0, 4)
         self.state[row][col] = 2
+        self.step += 1
     def compressBoard(self): #compress all tiles to the left
         new_state = np.zeros((4, 4), dtype=np.int32)
         for row in range(4):
@@ -59,7 +60,6 @@ class Board:
         self.compressBoard()
         self.mergeBoard()
         self.compressBoard()
-        self.step += 1
     def moveRight(self):
         self.reverseBoard()
         self.moveLeft()
